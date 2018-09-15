@@ -65,19 +65,36 @@ router.post('/attendee', (req, res) => {
 // Add attendees to a talk
 
 router.post('/conf', (req, res) => {
-    console.log('body', req.body);
     const { name, title } = req.body;
-
-    return attendeesModel.create(data)
-        .then(() => {
-            res.send({
-                message: 'we are live'
-            })
+    console.log('req.body', req.body)
+    return attendeesModel.findByName(name)
+        .then((data) => {
+                const att = {
+                    name: data[0].name,
+                    company: data[0].company,
+                    email: data[0].email,
+                    registered: data[0].registered
+                }
+                const query = { title: title }
+                console.log('d', data)
+                talksModel.findOneAndUpdate(query, { $push: { attendees : att }} )
+                    .then((da) => {
+                        console.log('update data', da);
+                        res.send({
+                            message: 'update succesful'
+                        })
+                    })
+                    .catch((err) => {
+                        console.log('update error', err)
+                        res.send({
+                            message: 'unable to update'
+                        })
+                    })
         })
         .catch((err) => {
-            console.log('Error from saving questions', err);
+            console.log('Error finding by name', err);
             res.send({
-                message: 'ERROR'
+                message: 'ERROR finding by name'
             })
         })
 });

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const attendeesModel = require('./attendees')
 
 const TalksSchema = new Schema({
     title: {
@@ -35,11 +36,12 @@ const TalksSchema = new Schema({
         },
         type: {String}
     },
-    attendees: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'attendees'
-    }
+    attendees: [attendeesModel.schema.obj]
 });
+
+TalksSchema.static('findByTitle', function(title, callback) {
+    return this.find({ title }, callback);
+  });
 
 const talksModel = mongoose.model('talks', TalksSchema);
 module.exports = talksModel;

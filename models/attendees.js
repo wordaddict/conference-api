@@ -5,8 +5,7 @@ const { Schema } = mongoose;
 const AttendeesSchema = new Schema({
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: false
     },
     company: {
         type: String,
@@ -19,7 +18,8 @@ const AttendeesSchema = new Schema({
     registered: {
         type: Date,
         default: moment(),
-    }
+    },
+    default: []
 });
 
 AttendeesSchema.static('findByName', function(name, callback) {
