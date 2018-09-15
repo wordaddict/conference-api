@@ -21,7 +21,6 @@ router.post('/talk', (req, res) => {
     if (Object.keys(req.body).length === 0) {
         return emptyBody(res)
     }
-    emptyBody(req.body, res)
     const { title, abstract, room, speaker } = req.body;
     if (!title){
         const incomplete_data = new Response(400, 'Kindly provide all title for the talk', res, true)
