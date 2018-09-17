@@ -1,5 +1,6 @@
 const config = require('../config/config');
 const { Test } = require('../models/talks');
+const Attendee = require('../models/attendees');
 
 
 // Require dependencies
@@ -16,6 +17,14 @@ chai.use(chaiHttp);
 describe('Test', () => {
   beforeEach((done) => {
     Test.remove({}, () => {
+      done();
+    });
+  });
+});
+
+describe('Attendee', () => {
+  beforeEach((done) => {
+    Attendee.remove({}, () => {
       done();
     });
   });
@@ -41,6 +50,64 @@ describe('/Post new Talks', () => {
         if (err) done(err);
         res.should.have.status(200);
         res.body.should.have.property('message');
+        res.body.should.have.property('code');
+        done();
+      });
+  });
+});
+
+// Test post attendee
+
+describe('/Post new Attendee', () => {
+  it('should respond with data on post', (done) => {
+    chai.request(app)
+      .post('/attendee')
+      .send({
+            "name":"micbb",
+            "company":"chatit",
+            "email": "yespeople@example.com"
+      })
+      .end((err, res) => {
+        if (err) done(err);
+        res.should.have.status(200);
+        res.body.should.have.property('message');
+        res.body.should.have.property('code');
+        done();
+      });
+  });
+});
+
+// Add attendees to talk
+
+describe('/Add new attendee to talk', () => {
+  it('should respond with data on post', (done) => {
+    chai.request(app)
+      .post('/conf')
+      .send({
+          "name": "tosin",
+          "title": "java"
+      })
+      .end((err, res) => {
+        if (err) done(err);
+        res.should.have.status(200);
+        res.body.should.have.property('message');
+        res.body.should.have.property('code');
+        done();
+      });
+  });
+});
+
+// Remove a talk
+
+describe('/Remove a talk', () => {
+  it('should respond with data on delete', (done) => {
+    chai.request(app)
+      .del('/talk/python')
+      .end((err, res) => {
+        if (err) done(err);
+        res.should.have.status(200);
+        res.body.should.have.property('message');
+        res.body.should.have.property('code');
         done();
       });
   });
