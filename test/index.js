@@ -52,6 +52,8 @@ describe('/Post new Talks', () => {
         res.body.should.have.property('message');
         res.body.should.have.property('code');
         res.body.should.have.property('message').eql("Talk has been registered successfully");
+        res.body.should.have.property('code').eql(201);
+        res.body.should.have.property('error').eql(false);
         done();
       });
   });
@@ -74,6 +76,8 @@ describe('/Post new Attendee', () => {
         res.body.should.have.property('message');
         res.body.should.have.property('code');
         res.body.should.have.property('message').eql("Attendee has been registered successfully");
+        res.body.should.have.property('code').eql(201);
+        res.body.should.have.property('error').eql(false);
         done();
       });
   });
@@ -95,6 +99,8 @@ describe('/Add new attendee to talk', () => {
         res.body.should.have.property('message');
         res.body.should.have.property('code');
         res.body.should.have.property('message').eql("Attendee has been added to talk successfully");
+        res.body.should.have.property('code').eql(201);
+        res.body.should.have.property('error').eql(false);
         done();
       });
   });
@@ -112,6 +118,8 @@ describe('/Remove a talk', () => {
         res.body.should.have.property('message');
         res.body.should.have.property('code');
         res.body.should.have.property('message').eql("Talk has been removed successfully");
+        res.body.should.have.property('code').eql(200);
+        res.body.should.have.property('error').eql(false);
         done();
       });
   });
@@ -131,6 +139,8 @@ describe('/Post empty body', () => {
       res.body.should.have.property('message');
       res.body.should.have.property('code');
       res.body.should.have.property('message').eql("The payload body is empty");
+      res.body.should.have.property('code').eql(400);
+      res.body.should.have.property('error').eql(true);
       done();
       });
   });
@@ -158,6 +168,8 @@ describe('/Post data without title', () => {
       res.body.should.have.property('message');
       res.body.should.have.property('code');
       res.body.should.have.property('message').eql("Kindly provide all title for the talk");
+      res.body.should.have.property('code').eql(400);
+      res.body.should.have.property('error').eql(true);
       done();
       });
   });
