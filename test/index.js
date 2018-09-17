@@ -1,5 +1,5 @@
 const config = require('../config/config');
-const { Test } = require('../models/talks');
+const Test = require('../models/talks');
 const Attendee = require('../models/attendees');
 
 
@@ -51,6 +51,7 @@ describe('/Post new Talks', () => {
         res.should.have.status(200);
         res.body.should.have.property('message');
         res.body.should.have.property('code');
+        res.body.should.have.property('message').eql("Talk has been registered successfully");
         done();
       });
   });
@@ -59,7 +60,7 @@ describe('/Post new Talks', () => {
 // Test post attendee
 
 describe('/Post new Attendee', () => {
-  it('should respond with data on post', (done) => {
+  it('should respond with data on post Attendee', (done) => {
     chai.request(app)
       .post('/attendee')
       .send({
@@ -72,6 +73,7 @@ describe('/Post new Attendee', () => {
         res.should.have.status(200);
         res.body.should.have.property('message');
         res.body.should.have.property('code');
+        res.body.should.have.property('message').eql("Attendee has been registered successfully");
         done();
       });
   });
@@ -80,7 +82,7 @@ describe('/Post new Attendee', () => {
 // Add attendees to talk
 
 describe('/Add new attendee to talk', () => {
-  it('should respond with data on post', (done) => {
+  it('should respond with data on talk', (done) => {
     chai.request(app)
       .post('/conf')
       .send({
@@ -92,6 +94,7 @@ describe('/Add new attendee to talk', () => {
         res.should.have.status(200);
         res.body.should.have.property('message');
         res.body.should.have.property('code');
+        res.body.should.have.property('message').eql("Attendee has been added to talk successfully");
         done();
       });
   });
@@ -108,7 +111,54 @@ describe('/Remove a talk', () => {
         res.should.have.status(200);
         res.body.should.have.property('message');
         res.body.should.have.property('code');
+        res.body.should.have.property('message').eql("Talk has been removed successfully");
         done();
+      });
+  });
+});
+
+// Empty payload
+
+describe('/Post empty body', () => {
+  it('should respond with an error message', (done) => {
+    chai.request(app)
+    .post('/conf')
+    .send({
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      res.should.have.status(200);
+      res.body.should.have.property('message');
+      res.body.should.have.property('code');
+      res.body.should.have.property('message').eql("The payload body is empty");
+      done();
+      });
+  });
+});
+
+// Not pass title for talk
+
+describe('/Post data without title', () => {
+  it('should respond with incomplete data', (done) => {
+    chai.request(app)
+    .post('/talk')
+    .send({
+      "abstract":"amazing language",
+      "room": 765,
+      "speaker": {
+          "name": "Micheal",
+          "company": "Terra",
+          "email": "madeyinka6@gmail.com",
+          "bio": "Result driven software engineer"
+      }
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      res.should.have.status(200);
+      res.body.should.have.property('message');
+      res.body.should.have.property('code');
+      res.body.should.have.property('message').eql("Kindly provide all title for the talk");
+      done();
       });
   });
 });
